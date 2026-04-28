@@ -195,14 +195,14 @@ Scanner sc = new Scanner(System.in);
 int num = sc.nextInt();
 if (num == 0){
    System.out.println("Zero");
-} else if(num % 2 == 0){
-   System.out.println("even && positive");
+} else if(num > 0 && num % 2 == 0 ){
+   System.out.println("even & positive");
 } else if( num > 0){
-   System.out.println("even && negative");
-} else if (num % 2 == 0 && num> 0){
-   System.out.println("odd && positive");
+   System.out.println("even & negative");
+} else if (num < 0 && num % 2 == 0 ){
+   System.out.println("odd & positive");
 } else {
-   System.out.println("odd && negative");
+   System.out.println("odd & negative");
 }
 
 }

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Calculator</title>
+
+    <style>
+        body {
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial;
+        }
+
+        .calculator {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px gray;
+            text-align: center;
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px;
+            font-size: 18px;
+        }
+
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .add { background: green; color: white; }
+        .sub { background: red; color: white; }
+        .mul { background: orange; color: white; }
+        .div { background: blue; color: white; }
+
+        #result {
+            margin-top: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="calculator">
+    <h2>Simple Calculator</h2>
+
+    <input type="number" id="num1" placeholder="Enter first number">
+    <input type="number" id="num2" placeholder="Enter second number">
+
+    <br>
+
+    <button class="add" onclick="add()">+</button>
+    <button class="sub" onclick="sub()">-</button>
+    <button class="mul" onclick="mul()">*</button>
+    <button class="div" onclick="divi()">/</button>
+    <button onclick="clearAll()" style="background: black; color:white;">C</button>
+
+    <h3 id="result"></h3>
+</div>
+
+<script>
+    function getValues() {
+        let a = document.getElementById("num1").value;
+        let b = document.getElementById("num2").value;
+
+        if (a === "" || b === "") {
+            document.getElementById("result").innerText = "Please enter both numbers";
+            return null;
+        }
+
+        return [Number(a), Number(b)];
+    }
+
+    function add() {
+        let values = getValues();
+        if (!values) return;
+
+        let [a, b] = values;
+        document.getElementById("result").innerText = "Result: " + (a + b);
+    }
+
+    function sub() {
+        let values = getValues();
+        if (!values) return;
+
+        let [a, b] = values;
+        document.getElementById("result").innerText = "Result: " + (a - b);
+    }
+
+    function mul() {
+        let values = getValues();
+        if (!values) return;
+
+        let [a, b] = values;
+        document.getElementById("result").innerText = "Result: " + (a * b);
+    }
+
+    function divi() {
+        let values = getValues();
+        if (!values) return;
+
+        let [a, b] = values;
+
+        if (b === 0) {
+            document.getElementById("result").innerText = "Cannot divide by zero";
+        } else {
+            document.getElementById("result").innerText = "Result: " + (a / b);
+        }
+    }
+</script>
+
+</body>
+</html>
