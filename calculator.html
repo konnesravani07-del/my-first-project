@@ -65,60 +65,73 @@
     <button class="sub" onclick="sub()">-</button>
     <button class="mul" onclick="mul()">*</button>
     <button class="div" onclick="divi()">/</button>
-    <button onclick="clearAll()" style="background: black; color:white;">C</button>
+    <button onclick="clearAll()" style="background: black; color: white;">C</button>
 
     <h3 id="result"></h3>
 </div>
 
 <script>
     function getValues() {
-        let a = document.getElementById("num1").value;
-        let b = document.getElementById("num2").value;
+    let a = document.getElementById("num1").value;
+    let b = document.getElementById("num2").value;
 
-        if (a === "" || b === "") {
-            document.getElementById("result").innerText = "Please enter both numbers";
-            return null;
-        }
-
-        return [Number(a), Number(b)];
+    if (a === "" || b === "") {
+        document.getElementById("result").innerText = "Please enter both numbers";
+        return null;
     }
 
-    function add() {
-        let values = getValues();
-        if (!values) return;
+    return [Number(a), Number(b)];
+}
 
-        let [a, b] = values;
-        document.getElementById("result").innerText = "Result: " + (a + b);
+function add() {
+    let values = getValues();
+    if (!values) return;
+
+    let [a, b] = values;
+    document.getElementById("result").innerText = "Result: " + (a + b);
+}
+
+function sub() {
+    let values = getValues();
+    if (!values) return;
+
+    let [a, b] = values;
+    document.getElementById("result").innerText = "Result: " + (a - b);
+}
+
+function mul() {
+    let values = getValues();
+    if (!values) return;
+
+    let [a, b] = values;
+    document.getElementById("result").innerText = "Result: " + (a * b);
+}
+
+function divi() {
+    let values = getValues();
+    if (!values) return;
+
+    let [a, b] = values;
+
+    if (b === 0) {
+        document.getElementById("result").innerText = "Cannot divide by zero";
+    } else {
+        document.getElementById("result").innerText = "Result: " + (a / b);
     }
+}
 
-    function sub() {
-        let values = getValues();
-        if (!values) return;
-
-        let [a, b] = values;
-        document.getElementById("result").innerText = "Result: " + (a - b);
-    }
-
-    function mul() {
-        let values = getValues();
-        if (!values) return;
-
-        let [a, b] = values;
-        document.getElementById("result").innerText = "Result: " + (a * b);
-    }
-
-    function divi() {
-        let values = getValues();
-        if (!values) return;
-
-        let [a, b] = values;
-
-        if (b === 0) {
-            document.getElementById("result").innerText = "Cannot divide by zero";
-        } else {
-            document.getElementById("result").innerText = "Result: " + (a / b);
-        }
-    }
+function clearAll() {
+    document.getElementById("num1").value = "";
+    document.getElementById("num2").value = "";
+    document.getElementById("result").innerText = "";
+}
+document.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") add();
+    if (event.key === "+") add();
+    if (event.key === "-") sub();
+    if (event.key === "*") mul();
+    if (event.key === "/") divi();   
+});
 </script>
 
 </body>
