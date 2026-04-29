@@ -1,115 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Student Result App</title>
-</head>
-<title>Student Result App</title>
+    <title>My Projects</title>
 
     <style>
-    body {
-        background: linear-gradient(to right, #4facfe, #00f2fe);
-        font-family: Arial;
-        text-align: center;
-        color: white;
-    }
+        body {
+            font-family: Arial;
+            text-align: center;
+            background: #f4f4f4;
+        }
 
-    h2 {
-        margin-top: 30px;
-    }
+        .box {
+            margin-top: 100px;
+        }
 
-    .container {
-        background: white;
-        color: black;
-        padding: 20px;
-        margin: 150px auto;
-        width: 300px;
-        border-radius: 10px;
-        box-shadow: 0px 0px 10px rgba(0,0,0,0.5);
-        text-align: center;
-    }
-
-    input {
-        padding: 8px;
-        width: 90px;
-        margin: 5px;
-    }
-    button {
-        padding: 8px;
-        margin: 5px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        background: #0072ff;
-        color: white;       
-    }
-    button:hover {
-        background: #0055cc;
-    }
-    
-    #result {
-        margin-top: 20px;
-        padding: 15px;
-        border-radius: 10px;
-        background: rgba(225,225,225,0.2);
-        display: inline-block;
-    }
-    
+        a {
+            display: block;
+            margin: 20px;
+            font-size: 22px;
+            text-decoration: none;
+            color: blue;
+        }
     </style>
-
 </head>
 
 <body>
-    
-    <div class=""container">
 
-<h2>Student Result System</h2>
+<div class="box">
+    <h1>My Projects</h1>
 
-<input type="text" id="name" placeholder="Enter Name"><br><br>
-<input type="number" id="marks" placeholder="Enter Marks"><br><br>
+    <a href="student.html">Student Result App</a>
+    <a href="calculator.html">Calculator App</a>
 
-<button onclick="calculate()">Check Result</button>
-<button onclick="resetForm()">Reset</button>
-
-<div id="result"></div>
-    </div>
-
-<script>
-function calculate() {
-
-    let name = document.getElementById("name").value;
-    let marks = document.getElementById("marks").value;
-
-    let grade = "";
-    let status = "";
-
-    if (marks >= 90) grade = "A";
-    else if (marks >= 75) grade = "B";
-    else if (marks >= 50) grade = "C";
-    else grade = "Fail";
-
-    status = marks >= 50 ? "Pass" : "Fail";
-    
-    let color = status === "Pass" ? "green" : "red";
-
-    let output =
-        "Name: " + name + "<br>" +
-        "Marks: " + marks + "<br>" +
-        "Grade: " + grade + "<br>" +
-        "Status: " + status;
-        document.getElementById("result").innerHTML =
-        "<span style='color:" + color + "'>" + output +"</span>";
-    // "<div style='background:" + (status === "Pass" ? "#90ee90" : "#ff7f7f") +
-    //             "; padding:15px; border-radius:10px; width:250px; margin:auto; color:black; animation:fade 0.5s;'>"
-    //             + output +
-    //             "</div>";
-        }
-
-        function resetForm() {
-            document.getElementById("name").value = "";
-            document.getElementById("marks").value = "";
-            document.getElementById("result").innerHTML = "";
-    }
-</script>
+</div>
 
 </body>
 </html>
