@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>To-Do App</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: linear-gradient(to right, #43cea2, #185a9d);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+        }
+
+        input {
+            width: 70%;
+            padding: 8px;
+        }
+
+        button {
+            padding: 8px;
+            margin-left: 5px;
+            cursor: pointer;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        li {
+            background: #f4f4f4;
+            margin: 5px 0;
+            padding: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .delete {
+            color: red;
+            cursor: pointer;
+        }
+
+        .done {
+            text-decoration: line-through;
+            color: gray;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>To-Do App</h2>
+
+    <input type="text" id="task" placeholder="Enter task">
+    <button onclick="addTask()">Add</button>
+
+    <ul id="list"></ul>
+    <p id="count"></p>
+</div>
+
+<script>
+let list = document.getElementById("list");
+
+// Add Task
+function addTask() {
+    let task = document.getElementById("task").value;
+
+    if (task === "") {
+        alert("Enter a task");
+        return;
+    }
+
+    let li = document.createElement("li");
+
+    li.innerHTML =
+        '<span onclick="toggleDone(this)">' + task + '</span>' +
+        ' <span class="delete" onclick="removeTask(this)">X</span>';
+
+    list.appendChild(li);
+
+    saveData();
+    updateCount();
+
+    document.getElementById("task").value = "";
+}
+
+// Remove Task
+function removeTask(element) {
+    element.parentElement.remove();
+    saveData();
+    updateCount();
+}
+
+// Toggle Done
+function toggleDone(element) {
+    element.classList.toggle("done");
+    saveData();
+    updateCount();
+}
+
+// Save Data
+function saveData() {
+    localStorage.setItem("tasks", list.innerHTML);
+}
+
+// Show Data
+function showData() {
+    list.innerHTML = localStorage.getItem("tasks") || "";
+    updateCount();
+}
+
+// Update Count
+function updateCount() {
+    let total = document.querySelectorAll("#list li").length;
+    document.getElementById("count").innerText = "Total Tasks: " + total;
+}
+
+// Run on load
+showData();
+
+</script>
+
+</body>
+</html>
