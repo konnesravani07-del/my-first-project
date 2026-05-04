@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Notes</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f4f4;
+            text-align: center;
+        }
+
+        body.dark {
+            background: #222;
+            color: white;
+        }
+
+        h1 {
+            margin-top: 20px;
+        }
+
+        .input-box {
+            margin: 20px;
+        }
+
+        input {
+            padding: 10px;
+            width: 250px;
+            margin: 5px;
+        }
+
+        button {
+            padding: 10px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .notes-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .note {
+            background: #fffa87;
+            padding: 15px;
+            margin: 10px;
+            width: 200px;
+            border-radius: 10px;
+            text-align: left;
+            position: relative;
+            transition: 0.2s;
+        }
+
+        .note:hover {
+            transform: scale(1.05);
+        }
+
+        .delete {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            cursor: pointer;
+        }
+
+        #searchInput {
+            width: 250px;
+        }
+
+        body.dark .note {
+            color: black;
+        }
+
+        body.dark input {
+            background: #333;
+            color: white;
+        }
+
+        body.dark button {
+            background: #444;
+            color: white;
+        }
+
+        .popup {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #222;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    font-size: 16px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>📝 Smart Notes</h1>
+
+<button onclick="toggleDarkMode()">🌙 Toggle Dark Mode</button>
+
+<div class="input-box">
+    <input type="text" id="noteInput" placeholder="Write something...">
+    <input type="time" id="timeInput">
+    <button onclick="addNote()">Add</button>
+    <input type="text" id="searchInput" placeholder="Search..." onkeyup="searchNotes()">
+</div>
+
+<div id="popup" class="popup hidden">
+    <p id="popupText"></p>
+</div>
+<audio id="alarmSound" src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg"></audio>
+<div class="notes-container" id="notesContainer"></div>
+
+<script>
+
+let notes = JSON.parse(localStorage.getItem("notes")) || [];
+
+document.body.addEventListener("click", () => {
+    let sound = document.getElementById("alarmSound");
+    sound.play().then(() => {
+        sound.pause();
+        sound.currentTime = 0;
+    }).catch(() => {});
+}, { once: true });
+
+// 🎨 random color
+function getRandomColor() {
+    let colors = ["#fffa87", "#ffb3ba", "#baffc9", "#bae1ff", "#ffd6a5"];
+    return colors[Math.floor(Math.random() * colors.length)];
+}
+
+// ➕ add note
+function addNote() {
+    let input = document.getElementById("noteInput");
+    let timeInput = document.getElementById("timeInput");
+
+    let text = input.value.trim();
+    let time = timeInput.value;
+
+    if (text === "") return;
+
+    let noteData = {
+        text: text,
+        time: time
+    };
+
+    notes.push(noteData);
+    localStorage.setItem("notes", JSON.stringify(notes));
+
+    displayNotes();
+    setReminder(noteData);
+
+    input.value = "";
+    timeInput.value = "";
+}
+
+// ⏰ reminder
+function setReminder(note) {
+    if (!note.time) return;
+
+    let now = new Date();
+    let target = new Date();
+
+    let [hours, minutes] = note.time.split(":");
+    target.setHours(hours, minutes, 0);
+
+    let diff = target - now;
+
+    if (diff > 0) {
+        setTimeout(() => {
+
+            let popup = document.getElementById("popup");
+            let popupText = document.getElementById("popupText");
+
+            popupText.innerText = "⏰ Reminder: " + note.text;
+            popup.classList.remove("hidden");
+
+            // 🔊 PLAY SOUND
+           let sound = new Audio("https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg");
+sound.play().catch(() => {});
+
+        // stop after 5 sec (optional)
+setTimeout(() => {
+    sound.pause();
+}, 5000);
+
+            // hide popup
+            setTimeout(() => {
+                popup.classList.add("hidden");
+            }, 5000);
+
+        }, diff);
+    }
+}
+let currentSound;
+
+function playAlarm() {
+    currentSound = new Audio("https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg");
+    currentSound.loop = true;
+    currentSound.play();
+}
+
+function stopAlarm() {
+    if (currentSound) {
+        currentSound.pause();
+        currentSound.currentTime = 0;
+    }
+}
+
+// 📄 display notes
+function displayNotes() {
+    let container = document.getElementById("notesContainer");
+    container.innerHTML = "";
+
+    if (notes.length === 0) {
+        container.innerHTML = "<p>No notes yet 🚀</p>";
+        return;
+    }
+
+    notes.forEach((note, index) => {
+        let div = document.createElement("div");
+        div.className = "note";
+
+        div.style.background = getRandomColor();
+
+        div.innerHTML = `
+            <span class="delete" onclick="deleteNote(${index})">❌</span>
+            <p onclick="editNote(${index})">${note.text}</p>
+            <small>${note.time || ""}</small>
+        `;
+
+        container.appendChild(div);
+    });
+}
+
+// ❌ delete
+function deleteNote(index) {
+    notes.splice(index, 1);
+    localStorage.setItem("notes", JSON.stringify(notes));
+    displayNotes();
+}
+
+// ✏️ edit
+function editNote(index) {
+    let newText = prompt("Edit your note:", notes[index].text);
+
+    if (!newText) return;
+
+    notes[index].text = newText;
+
+    localStorage.setItem("notes", JSON.stringify(notes));
+    displayNotes();
+}
+
+// 🔍 search
+function searchNotes() {
+    let search = document.getElementById("searchInput").value.toLowerCase();
+    let noteElements = document.querySelectorAll(".note");
+
+    noteElements.forEach(note => {
+        let text = note.innerText.toLowerCase();
+
+        note.style.display = text.includes(search) ? "block" : "none";
+    });
+}
+
+// 🌙 dark mode
+if (localStorage.getItem("darkMode") === "on") {
+    document.body.classList.add("dark");
+}
+
+function toggleDarkMode() {
+    document.body.classList.toggle("dark");
+
+    if (document.body.classList.contains("dark")) {
+        localStorage.setItem("darkMode", "on");
+    } else {
+        localStorage.setItem("darkMode", "off");
+    }
+}
+
+// ⌨️ Enter key support
+document.getElementById("noteInput").addEventListener("keypress", function(e) {
+    if (e.key === "Enter") {
+        addNote();
+    }
+});
+
+// 🔁 restore reminders after refresh
+notes.forEach(note => {
+    setReminder(note);
+});
+
+// load notes
+displayNotes();
+
+</script>
+
+</body>
+</html>
