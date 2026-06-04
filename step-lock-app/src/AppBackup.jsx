@@ -58,12 +58,12 @@ const [challengeCompleted, setChallengeCompleted] = useState(false);
   padding: "14px 24px",
   border: "none",
   borderRadius: "16px",
+  background: "linear-gradient(to right, #22c55e, #16a34a)",
   color: "white",
   fontSize: "18px",
   cursor: "pointer",
   fontWeight: "bold",
-  background: "linear-gradient(to right, #22c55e, #3b82f6)",
-boxShadow: "0 0 15px rgba(34,197,94,0.7)",
+  boxShadow: "0 0 15px rgba(34,197,94,0.4)",
   transition: "0.3s",
 };
 
